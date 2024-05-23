@@ -35,17 +35,20 @@ auto ConditionGroup::evaluate() -> Object
       }));
 }
 
-auto operator<<(nlohmann::json & json, const ConditionGroup & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const ConditionGroup & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
-  json["Condition"] = nlohmann::json::array();
+  auto conditions = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & each : datum) {
-    nlohmann::json condition;
+    openscenario_interpreter::utility::Json condition;
     condition << each;
-    json["Condition"].push_back(condition);
+    conditions.add(condition);
   }
+
+  json["Condition"] = conditions;
 
   return json;
 }

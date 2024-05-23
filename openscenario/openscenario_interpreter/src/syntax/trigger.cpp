@@ -63,17 +63,20 @@ auto Trigger::activeConditionGroupDescription() const
   return name_description_vec;
 }
 
-auto operator<<(nlohmann::json & json, const Trigger & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Trigger & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
-  json["ConditionGroup"] = nlohmann::json::array();
+  auto condition_groups = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & each : datum) {
-    nlohmann::json condition_group;
+    openscenario_interpreter::utility::Json condition_group;
     condition_group << each;
-    json["ConditionGroup"].push_back(condition_group);
+    condition_groups.add(condition_group);
   }
+
+  json["ConditionGroup"] = condition_groups;
 
   return json;
 }

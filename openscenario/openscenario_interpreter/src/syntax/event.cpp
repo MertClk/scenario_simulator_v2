@@ -67,24 +67,27 @@ auto Event::evaluate() -> Object
   }
 }
 
-auto operator<<(nlohmann::json & json, const Event & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Event & datum)
+  -> openscenario_interpreter::utility::Json
 {
-  json["name"] = datum.name;
+  json["name"] = datum.name.c_str();
 
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
   json["currentExecutionCount"] = datum.current_execution_count;
   json["maximumExecutionCount"] = datum.maximum_execution_count;
 
-  json["Action"] = nlohmann::json::array();
+  auto actions = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & each : datum.elements) {
-    nlohmann::json action;
+    openscenario_interpreter::utility::Json action;
     action << each.as<Action>();
-    json["Action"].push_back(action);
+    actions.add(action);
   }
 
-  json["StartTrigger"] << datum.start_trigger;
+  json["Action"] = actions;
+
+  json["StartTrigger"].as<openscenario_interpreter::utility::Json>() << datum.start_trigger;
 
   return json;
 }

@@ -15,10 +15,10 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__MANEUVER_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__MANEUVER_HPP_
 
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/parameter_declarations.hpp>
 #include <openscenario_interpreter/syntax/storyboard_element.hpp>
+#include <openscenario_interpreter/utility/json.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter
@@ -48,7 +48,8 @@ struct Maneuver : public Scope, public StoryboardElement
 
   auto running_events_count() const -> std::size_t;
 
-  friend auto operator<<(nlohmann::json &, const Maneuver &) -> nlohmann::json &;
+  friend auto operator<<(openscenario_interpreter::utility::Json, const Maneuver &)
+    -> openscenario_interpreter::utility::Json;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

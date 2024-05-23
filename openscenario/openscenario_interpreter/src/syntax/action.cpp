@@ -58,9 +58,10 @@ auto Action::stop() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Action & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Action & datum)
+  -> openscenario_interpreter::utility::Json
 {
-  json["name"] = datum.name;
+  json["name"] = datum.name.c_str();
 
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 

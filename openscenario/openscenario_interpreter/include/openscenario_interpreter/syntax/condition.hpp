@@ -19,7 +19,6 @@
 #include <cstddef>
 #include <functional>
 #include <list>
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/object.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/simulator_core.hpp>
@@ -27,6 +26,7 @@
 #include <openscenario_interpreter/syntax/condition_edge.hpp>
 #include <openscenario_interpreter/syntax/double.hpp>
 #include <openscenario_interpreter/syntax/string.hpp>
+#include <openscenario_interpreter/utility/json.hpp>
 #include <pugixml.hpp>
 #include <tuple>
 
@@ -90,7 +90,8 @@ private:
   }
 };
 
-auto operator<<(nlohmann::json &, const Condition &) -> nlohmann::json &;
+auto operator<<(openscenario_interpreter::utility::Json, const Condition &)
+  -> openscenario_interpreter::utility::Json;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

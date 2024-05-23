@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <chrono>
 #define OPENSCENARIO_INTERPRETER_NO_EXTENSION
 
 #include <algorithm>
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/openscenario_interpreter.hpp>
 #include <openscenario_interpreter/record.hpp>
 #include <openscenario_interpreter/syntax/object_controller.hpp>
 #include <openscenario_interpreter/syntax/parameter_value_distribution.hpp>
 #include <openscenario_interpreter/syntax/scenario_definition.hpp>
 #include <openscenario_interpreter/syntax/scenario_object.hpp>
+#include <openscenario_interpreter/utility/json.hpp>
 #include <openscenario_interpreter/utility/overload.hpp>
 #include <status_monitor/status_monitor.hpp>
 
@@ -271,10 +272,16 @@ auto Interpreter::publishCurrentContext() const -> void
 {
   Context context;
   {
-    nlohmann::json json;
+    const auto begin = std::chrono::steady_clock::now();
+    ArduinoJson::JsonDocument json;
     context.stamp = now();
-    context.data = (json << *script).dump();
+    json.as<openscenario_interpreter::utility::Json>() << *script;
+    ArduinoJson::serializeJson(json, context.data);
     context.time = evaluateSimulationTime();
+    const auto end = std::chrono::steady_clock::now();
+    RCLCPP_INFO(
+      get_logger(), "Took: %ld",
+      std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
   }
 
   publisher_of_context->publish(context);

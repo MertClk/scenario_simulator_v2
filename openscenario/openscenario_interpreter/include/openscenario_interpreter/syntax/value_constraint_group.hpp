@@ -15,9 +15,9 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__VALUE_CONSTRAINT_GROUP_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__VALUE_CONSTRAINT_GROUP_HPP_
 
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/value_constraint.hpp>
+#include <openscenario_interpreter/utility/json.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter

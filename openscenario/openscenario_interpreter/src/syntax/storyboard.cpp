@@ -58,21 +58,22 @@ auto Storyboard::run() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Storyboard & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Storyboard & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
-  json["Init"] << datum.init;
+  json["Init"].as<openscenario_interpreter::utility::Json>() << datum.init;
 
-  json["Story"] = nlohmann::json::array();
+  json["Story"] = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & story : datum.elements) {
-    nlohmann::json each;
+    openscenario_interpreter::utility::Json each;
     if (story.is<InitActions>()) {
       continue;
     }
     each << story.as<Story>();
-    json["Story"].push_back(each);
+    json["Story"].as<openscenario_interpreter::utility::JsonArray>().add(each);
   }
 
   return json;

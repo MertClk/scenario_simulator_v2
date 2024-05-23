@@ -44,7 +44,8 @@ auto OpenScenario::load(const boost::filesystem::path & filepath) -> const pugi:
   }
 }
 
-auto operator<<(nlohmann::json & json, const OpenScenario & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const OpenScenario & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["version"] = "1.0";
 
@@ -59,7 +60,8 @@ auto operator<<(nlohmann::json & json, const OpenScenario & datum) -> nlohmann::
   // clang-format on
 
   if (datum.category.is<ScenarioDefinition>()) {
-    json["OpenSCENARIO"] << datum.category.as<ScenarioDefinition>();
+    json["OpenSCENARIO"].as<openscenario_interpreter::utility::Json>()
+      << datum.category.as<ScenarioDefinition>();
   }
 
   return json;

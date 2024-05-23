@@ -46,18 +46,19 @@ auto Act::run() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Act & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Act & datum)
+  -> openscenario_interpreter::utility::Json
 {
-  json["name"] = datum.name;
+  json["name"] = datum.name.c_str();
 
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
-  json["ManeuverGroup"] = nlohmann::json::array();
+  json["ManeuverGroup"] = openscenario_interpreter::utility::JsonArray();
 
   for (auto && maneuver_group : datum.elements) {
-    nlohmann::json act;
+    openscenario_interpreter::utility::Json act;
     act << maneuver_group.as<ManeuverGroup>();
-    json["ManeuverGroup"].push_back(act);
+    json["ManeuverGroup"].as<openscenario_interpreter::utility::JsonArray>().add(act);
   }
 
   return json;

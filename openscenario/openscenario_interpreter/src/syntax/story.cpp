@@ -49,18 +49,19 @@ auto Story::run() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Story & story) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Story & story)
+  -> openscenario_interpreter::utility::Json
 {
   json["name"] = story.name;
 
   json["currentState"] = boost::lexical_cast<std::string>(story.state());
 
-  json["Act"] = nlohmann::json::array();
+  json["Act"] = openscenario_interpreter::utility::JsonArray();
 
   for (auto && act : story.elements) {
-    nlohmann::json json_act;
+    openscenario_interpreter::utility::Json json_act;
     json_act << act.as<Act>();
-    json["Act"].push_back(json_act);
+    json["Act"].as<openscenario_interpreter::utility::JsonArray>().add(json_act);
   }
 
   return json;

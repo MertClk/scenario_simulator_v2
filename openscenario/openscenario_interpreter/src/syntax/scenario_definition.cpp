@@ -16,6 +16,8 @@
 #include <openscenario_interpreter/syntax/custom_command_action.hpp>
 #include <openscenario_interpreter/syntax/scenario_definition.hpp>
 
+#include "ArduinoJson/Json/JsonSerializer.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -41,14 +43,17 @@ auto ScenarioDefinition::evaluate() -> Object
 
 auto operator<<(std::ostream & os, const ScenarioDefinition & datum) -> std::ostream &
 {
-  nlohmann::json json;
+  openscenario_interpreter::utility::Json json;
 
-  return os << (json << datum).dump(2);
+  ArduinoJson::serializeJson((json << datum), os);
+
+  return os;
 }
 
-auto operator<<(nlohmann::json & json, const ScenarioDefinition & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const ScenarioDefinition & datum)
+  -> openscenario_interpreter::utility::Json
 {
-  json["Storyboard"] << datum.storyboard;
+  json["Storyboard"].as<openscenario_interpreter::utility::Json>() << datum.storyboard;
 
   return json;
 }

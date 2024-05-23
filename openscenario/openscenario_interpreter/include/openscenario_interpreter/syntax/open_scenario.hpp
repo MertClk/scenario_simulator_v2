@@ -16,10 +16,10 @@
 #define OPENSCENARIO_INTERPRETER__SYNTAX__OPEN_SCENARIO_HPP_
 
 #include <boost/filesystem.hpp>
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/file_header.hpp>
 #include <openscenario_interpreter/syntax/open_scenario_category.hpp>
+#include <openscenario_interpreter/utility/json.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter
@@ -55,7 +55,8 @@ struct OpenScenario : public Scope
   auto load(const boost::filesystem::path &) -> const pugi::xml_node &;
 };
 
-auto operator<<(nlohmann::json &, const OpenScenario &) -> nlohmann::json &;
+auto operator<<(openscenario_interpreter::utility::Json, const OpenScenario &)
+  -> openscenario_interpreter::utility::Json;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

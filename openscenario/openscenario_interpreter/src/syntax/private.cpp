@@ -85,16 +85,17 @@ auto Private::startNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Private & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Private & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["entityRef"] = datum.entity_ref;
 
-  json["PrivateAction"] = nlohmann::json::array();
+  json["PrivateAction"] = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & private_action : datum.private_actions) {
-    nlohmann::json action;
+    openscenario_interpreter::utility::Json action;
     action["type"] = makeTypename(private_action.type());
-    json["PrivateAction"].push_back(action);
+    json["PrivateAction"].as<openscenario_interpreter::utility::JsonArray>().add(action);
   }
 
   return json;

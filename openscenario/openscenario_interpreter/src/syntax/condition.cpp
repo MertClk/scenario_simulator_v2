@@ -68,13 +68,14 @@ auto Condition::evaluate() -> Object
   }
 }
 
-auto operator<<(nlohmann::json & json, const Condition & datum) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const Condition & datum)
+  -> openscenario_interpreter::utility::Json
 {
   json["currentEvaluation"] = datum.description();
 
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
-  json["name"] = datum.name;
+  json["name"] = datum.name.c_str();
 
   // clang-format off
   static const std::unordered_map<

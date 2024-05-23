@@ -154,31 +154,38 @@ auto InitActions::runNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const InitActions & init_actions) -> nlohmann::json &
+auto operator<<(openscenario_interpreter::utility::Json json, const InitActions & init_actions)
+  -> openscenario_interpreter::utility::Json
 {
-  json["GlobalAction"] = nlohmann::json::array();
+  auto global_action = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & init_action : init_actions.global_actions) {
-    nlohmann::json action;
+    openscenario_interpreter::utility::Json action;
     action["type"] = makeTypename(init_action.as<GlobalAction>().type());
-    json["GlobalAction"].push_back(action);
+    global_action.add(action);
   }
 
-  json["UserDefinedAction"] = nlohmann::json::array();
+  json["GlobalAction"] = global_action;
+
+  auto user_defined_action = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & init_action : init_actions.user_defined_actions) {
-    nlohmann::json action;
+    openscenario_interpreter::utility::Json action;
     action["type"] = makeTypename(init_action.as<UserDefinedAction>().type());
-    json["UserDefinedAction"].push_back(action);
+    user_defined_action.add(action);
   }
 
-  json["Private"] = nlohmann::json::array();
+  json["UserDefinedAction"] = user_defined_action;
+
+  auto private_ = openscenario_interpreter::utility::JsonArray();
 
   for (const auto & init_action : init_actions.privates) {
-    nlohmann::json action;
+    openscenario_interpreter::utility::Json action;
     action << init_action.as<Private>();
-    json["Private"].push_back(action);
+    private_.add(action);
   }
+
+  json["Private"] = private_;
 
   return json;
 }
