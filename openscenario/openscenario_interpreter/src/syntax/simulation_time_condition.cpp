@@ -28,7 +28,7 @@ SimulationTimeCondition::SimulationTimeCondition(const pugi::xml_node & node, Sc
 
 auto SimulationTimeCondition::description() const -> String
 {
-  std::stringstream description;
+  std::ostringstream description;
 
   description << "Is the simulation time (= " << std::fixed << std::setprecision(6) << result
               << ") is " << compare << " " << value << "?";

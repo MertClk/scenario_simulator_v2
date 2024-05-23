@@ -77,17 +77,11 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Event & datu
   json["currentExecutionCount"] = datum.current_execution_count;
   json["maximumExecutionCount"] = datum.maximum_execution_count;
 
-  auto actions = openscenario_interpreter::utility::JsonArray();
-
   for (const auto & each : datum.elements) {
-    openscenario_interpreter::utility::Json action;
-    action << each.as<Action>();
-    actions.add(action);
+    json["Action"].to<JsonArray>().add<ArduinoJson::JsonObject>() << each.as<Action>();
   }
 
-  json["Action"] = actions;
-
-  json["StartTrigger"].as<openscenario_interpreter::utility::Json>() << datum.start_trigger;
+  json["StartTrigger"].to<openscenario_interpreter::utility::Json>() << datum.start_trigger;
 
   return json;
 }

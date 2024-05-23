@@ -56,12 +56,8 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Story & stor
 
   json["currentState"] = boost::lexical_cast<std::string>(story.state());
 
-  json["Act"] = openscenario_interpreter::utility::JsonArray();
-
   for (auto && act : story.elements) {
-    openscenario_interpreter::utility::Json json_act;
-    json_act << act.as<Act>();
-    json["Act"].as<openscenario_interpreter::utility::JsonArray>().add(json_act);
+    json["Act"].to<JsonArray>().add<ArduinoJson::JsonObject>() << act.as<Act>();
   }
 
   return json;

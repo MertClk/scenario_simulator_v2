@@ -275,12 +275,12 @@ auto Interpreter::publishCurrentContext() const -> void
     const auto begin = std::chrono::steady_clock::now();
     ArduinoJson::JsonDocument json;
     context.stamp = now();
-    json.as<openscenario_interpreter::utility::Json>() << *script;
+    json.to<openscenario_interpreter::utility::Json>() << *script;
     ArduinoJson::serializeJson(json, context.data);
     context.time = evaluateSimulationTime();
     const auto end = std::chrono::steady_clock::now();
     RCLCPP_INFO(
-      get_logger(), "Took: %ld",
+      get_logger(), "Publishing context took %ld us",
       std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
   }
 

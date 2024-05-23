@@ -60,7 +60,7 @@ auto operator<<(openscenario_interpreter::utility::Json json, const OpenScenario
   // clang-format on
 
   if (datum.category.is<ScenarioDefinition>()) {
-    json["OpenSCENARIO"].as<openscenario_interpreter::utility::Json>()
+    json["OpenSCENARIO"].to<openscenario_interpreter::utility::Json>()
       << datum.category.as<ScenarioDefinition>();
   }
 

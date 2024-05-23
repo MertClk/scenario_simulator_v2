@@ -53,7 +53,7 @@ auto operator<<(std::ostream & os, const ScenarioDefinition & datum) -> std::ost
 auto operator<<(openscenario_interpreter::utility::Json json, const ScenarioDefinition & datum)
   -> openscenario_interpreter::utility::Json
 {
-  json["Storyboard"].as<openscenario_interpreter::utility::Json>() << datum.storyboard;
+  json["Storyboard"].to<openscenario_interpreter::utility::Json>() << datum.storyboard;
 
   return json;
 }

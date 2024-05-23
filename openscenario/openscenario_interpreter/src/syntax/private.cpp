@@ -90,12 +90,9 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Private & da
 {
   json["entityRef"] = datum.entity_ref;
 
-  json["PrivateAction"] = openscenario_interpreter::utility::JsonArray();
-
   for (const auto & private_action : datum.private_actions) {
-    openscenario_interpreter::utility::Json action;
+    auto action = json["PrivateAction"].to<JsonArray>().add<ArduinoJson::JsonObject>();
     action["type"] = makeTypename(private_action.type());
-    json["PrivateAction"].as<openscenario_interpreter::utility::JsonArray>().add(action);
   }
 
   return json;

@@ -40,15 +40,9 @@ auto operator<<(openscenario_interpreter::utility::Json json, const ConditionGro
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
-  auto conditions = openscenario_interpreter::utility::JsonArray();
-
   for (const auto & each : datum) {
-    openscenario_interpreter::utility::Json condition;
-    condition << each;
-    conditions.add(condition);
+    json["Condition"].to<JsonArray>().add<ArduinoJson::JsonObject>() << each;
   }
-
-  json["Condition"] = conditions;
 
   return json;
 }

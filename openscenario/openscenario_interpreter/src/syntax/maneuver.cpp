@@ -71,12 +71,8 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Maneuver & m
 
   json["currentState"] = boost::lexical_cast<std::string>(maneuver.state());
 
-  json["Event"] = openscenario_interpreter::utility::JsonArray();
-
   for (const auto & event : maneuver.elements) {
-    openscenario_interpreter::utility::Json json_event;
-    json_event << event.as<Event>();
-    json["Event"].as<openscenario_interpreter::utility::JsonArray>().add(json_event);
+    json["Event"].to<JsonArray>().add<ArduinoJson::JsonObject>() << event.as<Event>();
   }
 
   return json;

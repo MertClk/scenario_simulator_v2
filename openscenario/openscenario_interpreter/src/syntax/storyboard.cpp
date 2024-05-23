@@ -23,6 +23,8 @@
 #include <openscenario_interpreter/syntax/storyboard.hpp>
 #include <openscenario_interpreter/syntax/user_defined_action.hpp>
 
+#include "ArduinoJson/Variant/VariantTo.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -63,17 +65,13 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Storyboard &
 {
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
-  json["Init"].as<openscenario_interpreter::utility::Json>() << datum.init;
-
-  json["Story"] = openscenario_interpreter::utility::JsonArray();
+  json["Init"].to<openscenario_interpreter::utility::Json>() << datum.init;
 
   for (const auto & story : datum.elements) {
-    openscenario_interpreter::utility::Json each;
     if (story.is<InitActions>()) {
       continue;
     }
-    each << story.as<Story>();
-    json["Story"].as<openscenario_interpreter::utility::JsonArray>().add(each);
+    json["Story"].to<ArduinoJson::JsonArray>().add<ArduinoJson::JsonObject>() << story.as<Story>();
   }
 
   return json;

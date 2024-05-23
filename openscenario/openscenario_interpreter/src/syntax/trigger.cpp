@@ -68,15 +68,9 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Trigger & da
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
-  auto condition_groups = openscenario_interpreter::utility::JsonArray();
-
   for (const auto & each : datum) {
-    openscenario_interpreter::utility::Json condition_group;
-    condition_group << each;
-    condition_groups.add(condition_group);
+    json["ConditionGroup"].to<JsonArray>().add<ArduinoJson::JsonObject>() << each;
   }
-
-  json["ConditionGroup"] = condition_groups;
 
   return json;
 }

@@ -17,6 +17,8 @@
 #include <openscenario_interpreter/syntax/custom_command_action.hpp>
 #include <openscenario_interpreter/syntax/maneuver_group.hpp>
 
+#include "ArduinoJson/Variant/VariantTo.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -53,12 +55,9 @@ auto operator<<(openscenario_interpreter::utility::Json json, const Act & datum)
 
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
-  json["ManeuverGroup"] = openscenario_interpreter::utility::JsonArray();
-
   for (auto && maneuver_group : datum.elements) {
-    openscenario_interpreter::utility::Json act;
-    act << maneuver_group.as<ManeuverGroup>();
-    json["ManeuverGroup"].as<openscenario_interpreter::utility::JsonArray>().add(act);
+    json["ManeuverGroup"].to<JsonArray>().add<ArduinoJson::JsonObject>()
+      << maneuver_group.as<ManeuverGroup>();
   }
 
   return json;

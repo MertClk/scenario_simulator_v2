@@ -45,7 +45,7 @@ auto Init::startNonInstantaneousActions() -> void { actions.startNonInstantaneou
 auto operator<<(openscenario_interpreter::utility::Json json, const Init & datum)
   -> openscenario_interpreter::utility::Json
 {
-  json["Actions"].as<openscenario_interpreter::utility::Json>() << datum.actions;
+  json["Actions"].to<openscenario_interpreter::utility::Json>() << datum.actions;
 
   return json;
 }

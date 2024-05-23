@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <ArduinoJson.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iomanip>
 #include <limits>
@@ -97,6 +98,22 @@ auto operator>>(std::istream & is, Double & datum) -> std::istream &
 
 auto operator<<(std::ostream & os, const Double & datum) -> std::ostream &
 {
+  // auto value = datum.data;
+
+  // if (value < 0.0) {
+  //   os << '-';
+  //   value = -value;
+  // }
+
+  // ArduinoJson::detail::FloatParts<decltype(value)> parts(value);
+
+  // writeInteger(parts.integral);
+  // if (parts.decimalPlaces) writeDecimals(parts.decimal, parts.decimalPlaces);
+
+  // if (parts.exponent) {
+  //   writeRaw('e');
+  //   writeInteger(parts.exponent);
+  // }
   return os << std::fixed << std::setprecision(30) << datum.data;
 }
 }  // namespace syntax
