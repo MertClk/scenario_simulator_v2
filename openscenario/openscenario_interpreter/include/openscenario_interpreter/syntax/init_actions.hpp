@@ -61,8 +61,7 @@ struct InitActions : public StoryboardElement
   Elements user_defined_actions;
   Elements privates;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const InitActions &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const InitActions &) -> JsonObject;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

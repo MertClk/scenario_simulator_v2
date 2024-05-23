@@ -63,13 +63,13 @@ auto Trigger::activeConditionGroupDescription() const
   return name_description_vec;
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Trigger & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Trigger & datum) -> JsonObject
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
+  auto conditionGroup = json["ConditionGroup"].to<JsonArray>();
   for (const auto & each : datum) {
-    json["ConditionGroup"].to<JsonArray>().add<ArduinoJson::JsonObject>() << each;
+    conditionGroup.add<JsonObject>() << each;
   }
 
   return json;

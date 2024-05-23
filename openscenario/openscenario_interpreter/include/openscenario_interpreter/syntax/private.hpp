@@ -59,8 +59,7 @@ struct Private : public Scope
   auto startNonInstantaneousActions() -> void;
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const Private &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const Private &) -> JsonObject;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

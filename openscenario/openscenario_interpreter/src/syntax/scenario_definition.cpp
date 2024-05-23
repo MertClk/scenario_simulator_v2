@@ -43,17 +43,16 @@ auto ScenarioDefinition::evaluate() -> Object
 
 auto operator<<(std::ostream & os, const ScenarioDefinition & datum) -> std::ostream &
 {
-  openscenario_interpreter::utility::Json json;
+  JsonObject json;
 
-  ArduinoJson::serializeJson((json << datum), os);
+  serializeJson((json << datum), os);
 
   return os;
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const ScenarioDefinition & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const ScenarioDefinition & datum) -> JsonObject
 {
-  json["Storyboard"].to<openscenario_interpreter::utility::Json>() << datum.storyboard;
+  json["Storyboard"].to<JsonObject>() << datum.storyboard;
 
   return json;
 }

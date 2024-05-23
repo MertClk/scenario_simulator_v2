@@ -68,8 +68,7 @@ auto Condition::evaluate() -> Object
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Condition & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Condition & datum) -> JsonObject
 {
   json["currentEvaluation"] = datum.description();
 

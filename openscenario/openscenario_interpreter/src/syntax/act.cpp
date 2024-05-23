@@ -48,16 +48,15 @@ auto Act::run() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Act & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Act & datum) -> JsonObject
 {
   json["name"] = datum.name.c_str();
 
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
+  auto maneuverGroup = json["ManeuverGroup"].to<JsonArray>();
   for (auto && maneuver_group : datum.elements) {
-    json["ManeuverGroup"].to<JsonArray>().add<ArduinoJson::JsonObject>()
-      << maneuver_group.as<ManeuverGroup>();
+    maneuverGroup.add<JsonObject>() << maneuver_group.as<ManeuverGroup>();
   }
 
   return json;

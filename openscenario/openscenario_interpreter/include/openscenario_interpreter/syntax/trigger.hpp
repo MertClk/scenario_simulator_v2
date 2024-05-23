@@ -54,8 +54,7 @@ struct Trigger : public std::list<ConditionGroup>
   auto evaluate() -> Object;
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const Trigger &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const Trigger &) -> JsonObject;
 
 static_assert(std::is_default_constructible<Trigger>::value);
 

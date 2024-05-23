@@ -48,8 +48,7 @@ struct Init
   auto startNonInstantaneousActions() -> void;
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const Init &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const Init &) -> JsonObject;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

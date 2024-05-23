@@ -59,8 +59,7 @@ auto ManeuverGroup::start() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const ManeuverGroup & maneuver_group)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const ManeuverGroup & maneuver_group) -> JsonObject
 {
   json["name"] = maneuver_group.name.c_str();
 
@@ -69,8 +68,9 @@ auto operator<<(openscenario_interpreter::utility::Json json, const ManeuverGrou
   json["currentExecutionCount"] = maneuver_group.current_execution_count;
   json["maximumExecutionCount"] = maneuver_group.maximum_execution_count;
 
+  auto maneuvers = json["Maneuver"].to<JsonArray>();
   for (auto && maneuver : maneuver_group.elements) {
-    json["Maneuver"].to<JsonArray>().add<ArduinoJson::JsonObject>() << maneuver.as<Maneuver>();
+    maneuvers.add<JsonObject>() << maneuver.as<Maneuver>();
   }
 
   return json;

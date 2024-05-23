@@ -85,13 +85,13 @@ auto Private::startNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Private & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Private & datum) -> JsonObject
 {
   json["entityRef"] = datum.entity_ref;
 
+  auto private_actions = json["PrivateAction"].to<JsonArray>();
   for (const auto & private_action : datum.private_actions) {
-    auto action = json["PrivateAction"].to<JsonArray>().add<ArduinoJson::JsonObject>();
+    auto action = private_actions.add<JsonObject>();
     action["type"] = makeTypename(private_action.type());
   }
 

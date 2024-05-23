@@ -58,8 +58,7 @@ struct ScenarioDefinition
 
   friend auto operator<<(std::ostream &, const ScenarioDefinition &) -> std::ostream &;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const ScenarioDefinition &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const ScenarioDefinition &) -> JsonObject;
 };
 
 }  // namespace syntax

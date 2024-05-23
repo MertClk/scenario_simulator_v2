@@ -35,13 +35,13 @@ auto ConditionGroup::evaluate() -> Object
       }));
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const ConditionGroup & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const ConditionGroup & datum) -> JsonObject
 {
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
+  auto condition = json["Condition"].to<JsonArray>();
   for (const auto & each : datum) {
-    json["Condition"].to<JsonArray>().add<ArduinoJson::JsonObject>() << each;
+    condition.add<JsonObject>() << each;
   }
 
   return json;

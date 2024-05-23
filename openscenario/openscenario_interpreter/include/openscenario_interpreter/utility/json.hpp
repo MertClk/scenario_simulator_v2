@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <unordered_map>
 
+#include "ArduinoJson/Array/JsonArray.hpp"
 #include "ArduinoJson/Document/JsonDocument.hpp"
 
 namespace openscenario_interpreter
@@ -13,7 +14,8 @@ namespace openscenario_interpreter
 inline namespace utility
 {
 
-using Json = ArduinoJson::JsonObject;
 using JsonArray = ArduinoJson::JsonArray;
+using JsonObject = ArduinoJson::JsonObject;
+
 }  // namespace utility
 }  // namespace openscenario_interpreter

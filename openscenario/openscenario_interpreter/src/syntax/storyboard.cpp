@@ -60,18 +60,18 @@ auto Storyboard::run() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Storyboard & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Storyboard & datum) -> JsonObject
 {
   json["currentState"] = boost::lexical_cast<std::string>(datum.state());
 
-  json["Init"].to<openscenario_interpreter::utility::Json>() << datum.init;
+  json["Init"].to<JsonObject>() << datum.init;
 
+  auto stories = json["Story"].to<JsonArray>();
   for (const auto & story : datum.elements) {
     if (story.is<InitActions>()) {
       continue;
     }
-    json["Story"].to<ArduinoJson::JsonArray>().add<ArduinoJson::JsonObject>() << story.as<Story>();
+    stories.add<JsonObject>() << story.as<Story>();
   }
 
   return json;

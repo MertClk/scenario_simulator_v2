@@ -154,21 +154,23 @@ auto InitActions::runNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const InitActions & init_actions)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const InitActions & init_actions) -> JsonObject
 {
+  auto global_actions = json["GlobalAction"].to<JsonArray>();
   for (const auto & init_action : init_actions.global_actions) {
-    auto action = json["GlobalAction"].to<JsonArray>().add<ArduinoJson::JsonObject>();
+    auto action = global_actions.add<JsonObject>();
     action["type"] = makeTypename(init_action.as<GlobalAction>().type());
   }
 
+  auto user_defined_actions = json["UserDefinedAction"].to<JsonArray>();
   for (const auto & init_action : init_actions.user_defined_actions) {
-    auto action = json["UserDefinedAction"].to<JsonArray>().add<ArduinoJson::JsonObject>();
+    auto action = user_defined_actions.add<JsonObject>();
     action["type"] = makeTypename(init_action.as<UserDefinedAction>().type());
   }
 
+  auto privates = json["Private"].to<JsonArray>();
   for (const auto & init_action : init_actions.privates) {
-    auto action = json["Private"].to<JsonArray>().add<ArduinoJson::JsonObject>();
+    auto action = privates.add<JsonObject>();
     action << init_action.as<Private>();
   }
 

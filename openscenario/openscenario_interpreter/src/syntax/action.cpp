@@ -58,8 +58,7 @@ auto Action::stop() -> void
   }
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Action & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Action & datum) -> JsonObject
 {
   json["name"] = datum.name.c_str();
 

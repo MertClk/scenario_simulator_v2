@@ -64,15 +64,15 @@ auto Maneuver::running_events_count() const -> std::size_t
   return ret;
 }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Maneuver & maneuver)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Maneuver & maneuver) -> JsonObject
 {
   json["name"] = maneuver.name;
 
   json["currentState"] = boost::lexical_cast<std::string>(maneuver.state());
 
+  auto events = json["Event"].to<JsonArray>();
   for (const auto & event : maneuver.elements) {
-    json["Event"].to<JsonArray>().add<ArduinoJson::JsonObject>() << event.as<Event>();
+    events.add<JsonObject>() << event.as<Event>();
   }
 
   return json;

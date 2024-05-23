@@ -43,8 +43,7 @@ struct Act : public Scope, public StoryboardElement
 
   auto run() -> void override;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const Act &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const Act &) -> JsonObject;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

@@ -105,7 +105,7 @@ auto operator<<(std::ostream & os, const Double & datum) -> std::ostream &
   //   value = -value;
   // }
 
-  // ArduinoJson::detail::FloatParts<decltype(value)> parts(value);
+  // detail::FloatParts<decltype(value)> parts(value);
 
   // writeInteger(parts.integral);
   // if (parts.decimalPlaces) writeDecimals(parts.decimal, parts.decimalPlaces);

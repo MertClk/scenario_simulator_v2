@@ -90,8 +90,7 @@ private:
   }
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const Condition &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const Condition &) -> JsonObject;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

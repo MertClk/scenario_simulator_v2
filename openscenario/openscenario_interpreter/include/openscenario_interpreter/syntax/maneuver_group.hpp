@@ -48,8 +48,7 @@ struct ManeuverGroup : public Scope, public StoryboardElement
 
   auto start() -> void override;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const ManeuverGroup &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const ManeuverGroup &) -> JsonObject;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

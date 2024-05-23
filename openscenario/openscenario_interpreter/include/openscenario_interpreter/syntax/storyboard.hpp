@@ -52,8 +52,7 @@ struct Storyboard : public Scope,
 
   auto run() -> void override;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const Storyboard &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const Storyboard &) -> JsonObject;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

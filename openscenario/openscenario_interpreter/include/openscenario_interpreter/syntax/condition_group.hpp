@@ -49,8 +49,7 @@ struct ConditionGroup : public std::list<Condition>
   auto evaluate() -> Object;
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const ConditionGroup &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const ConditionGroup &) -> JsonObject;
 
 template <typename T>
 using isConditionGroup = typename std::is_same<typename std::decay<T>::type, ConditionGroup>;

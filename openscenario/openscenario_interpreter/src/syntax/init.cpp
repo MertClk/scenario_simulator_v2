@@ -42,10 +42,9 @@ auto Init::runNonInstantaneousActions() -> void { actions.runNonInstantaneousAct
 
 auto Init::startNonInstantaneousActions() -> void { actions.startNonInstantaneousActions(); }
 
-auto operator<<(openscenario_interpreter::utility::Json json, const Init & datum)
-  -> openscenario_interpreter::utility::Json
+auto operator<<(JsonObject json, const Init & datum) -> JsonObject
 {
-  json["Actions"].to<openscenario_interpreter::utility::Json>() << datum.actions;
+  json["Actions"].to<JsonObject>() << datum.actions;
 
   return json;
 }

@@ -48,8 +48,7 @@ struct Maneuver : public Scope, public StoryboardElement
 
   auto running_events_count() const -> std::size_t;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const Maneuver &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const Maneuver &) -> JsonObject;
 };
 }  // namespace syntax
 }  // namespace openscenario_interpreter

@@ -53,8 +53,7 @@ struct Event : private Scope, public StoryboardElement
 
   auto evaluate() -> Object override;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const Event &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const Event &) -> JsonObject;
 
 private:
   Maneuver & parent_maneuver;

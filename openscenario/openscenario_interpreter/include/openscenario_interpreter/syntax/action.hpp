@@ -56,8 +56,7 @@ struct Action : public Scope, public ComplexType, public StoryboardElement
 
   auto stop() -> void override;
 
-  friend auto operator<<(openscenario_interpreter::utility::Json, const Action &)
-    -> openscenario_interpreter::utility::Json;
+  friend auto operator<<(JsonObject, const Action &) -> JsonObject;
 };
 
 DEFINE_LAZY_VISITOR(

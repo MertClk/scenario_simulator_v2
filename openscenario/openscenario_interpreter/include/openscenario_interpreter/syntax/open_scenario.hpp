@@ -55,8 +55,7 @@ struct OpenScenario : public Scope
   auto load(const boost::filesystem::path &) -> const pugi::xml_node &;
 };
 
-auto operator<<(openscenario_interpreter::utility::Json, const OpenScenario &)
-  -> openscenario_interpreter::utility::Json;
+auto operator<<(JsonObject, const OpenScenario &) -> JsonObject;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 
