@@ -64,18 +64,21 @@ auto Maneuver::running_events_count() const -> std::size_t
   return ret;
 }
 
-auto operator<<(nlohmann::json & json, const Maneuver & maneuver) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Maneuver & maneuver) -> rapidjson::Value &
 {
-  json["name"] = maneuver.name;
+  // json["name"] = maneuver.name;
+  json.AddMember("name", maneuver.name, get_json_allocator());
 
-  json["currentState"] = boost::lexical_cast<std::string>(maneuver.state());
+  json.AddMember(
+    "currentState", boost::lexical_cast<std::string>(maneuver.state()), get_json_allocator());
 
-  json["Event"] = nlohmann::json::array();
+  // json["Event"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("Event", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & event : maneuver.elements) {
-    nlohmann::json json_event;
+    rapidjson::Value json_event;
     json_event << event.as<Event>();
-    json["Event"].push_back(json_event);
+    json["Event"].PushBack(json_event, get_json_allocator());
   }
 
   return json;

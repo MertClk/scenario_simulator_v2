@@ -15,6 +15,8 @@
 #include <openscenario_interpreter/reader/element.hpp>
 #include <openscenario_interpreter/syntax/trigger.hpp>
 
+#include "openscenario_interpreter/utility/rapidjson.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -63,16 +65,18 @@ auto Trigger::activeConditionGroupDescription() const
   return name_description_vec;
 }
 
-auto operator<<(nlohmann::json & json, const Trigger & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Trigger & datum) -> rapidjson::Value &
 {
-  json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
+  json.AddMember(
+    "currentValue", boost::lexical_cast<std::string>(Boolean(datum.current_value)),
+    get_json_allocator());
 
-  json["ConditionGroup"] = nlohmann::json::array();
+  json["ConditionGroup"] = rapidjson::Value(rapidjson::kArrayType);
 
   for (const auto & each : datum) {
-    nlohmann::json condition_group;
+    rapidjson::Value condition_group;
     condition_group << each;
-    json["ConditionGroup"].push_back(condition_group);
+    json["ConditionGroup"].PushBack(condition_group, get_json_allocator());
   }
 
   return json;

@@ -15,12 +15,12 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__SCENARIO_DEFINITION_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__SCENARIO_DEFINITION_HPP_
 
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/syntax/catalog_locations.hpp>
 #include <openscenario_interpreter/syntax/entities.hpp>
 #include <openscenario_interpreter/syntax/parameter_declarations.hpp>
 #include <openscenario_interpreter/syntax/road_network.hpp>
 #include <openscenario_interpreter/syntax/storyboard.hpp>
+#include <openscenario_interpreter/utility/rapidjson.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter
@@ -58,7 +58,7 @@ struct ScenarioDefinition
 
   friend auto operator<<(std::ostream &, const ScenarioDefinition &) -> std::ostream &;
 
-  friend auto operator<<(nlohmann::json &, const ScenarioDefinition &) -> nlohmann::json &;
+  friend auto operator<<(rapidjson::Value &, const ScenarioDefinition &) -> rapidjson::Value &;
 };
 
 }  // namespace syntax

@@ -20,6 +20,8 @@
 #include <openscenario_interpreter/utility/demangle.hpp>
 #include <unordered_map>
 
+#include "openscenario_interpreter/utility/rapidjson.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -154,30 +156,32 @@ auto InitActions::runNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const InitActions & init_actions) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const InitActions & init_actions) -> rapidjson::Value &
 {
-  json["GlobalAction"] = nlohmann::json::array();
+  json["GlobalAction"] = rapidjson::Value(rapidjson::kArrayType);
 
   for (const auto & init_action : init_actions.global_actions) {
-    nlohmann::json action;
-    action["type"] = makeTypename(init_action.as<GlobalAction>().type());
-    json["GlobalAction"].push_back(action);
+    rapidjson::Value action;
+    action.AddMember(
+      "type", makeTypename(init_action.as<GlobalAction>().type()), get_json_allocator());
+    json["GlobalAction"].PushBack(action, get_json_allocator());
   }
 
-  json["UserDefinedAction"] = nlohmann::json::array();
+  json["UserDefinedAction"] = rapidjson::Value(rapidjson::kArrayType);
 
   for (const auto & init_action : init_actions.user_defined_actions) {
-    nlohmann::json action;
-    action["type"] = makeTypename(init_action.as<UserDefinedAction>().type());
-    json["UserDefinedAction"].push_back(action);
+    rapidjson::Value action;
+    action.AddMember(
+      "type", makeTypename(init_action.as<UserDefinedAction>().type()), get_json_allocator());
+    json["UserDefinedAction"].PushBack(action, get_json_allocator());
   }
 
-  json["Private"] = nlohmann::json::array();
+  json["Private"] = rapidjson::Value(rapidjson::kArrayType);
 
   for (const auto & init_action : init_actions.privates) {
-    nlohmann::json action;
+    rapidjson::Value action;
     action << init_action.as<Private>();
-    json["Private"].push_back(action);
+    json["Private"].PushBack(action, get_json_allocator());
   }
 
   return json;

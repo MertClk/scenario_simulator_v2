@@ -42,7 +42,7 @@ auto Init::runNonInstantaneousActions() -> void { actions.runNonInstantaneousAct
 
 auto Init::startNonInstantaneousActions() -> void { actions.startNonInstantaneousActions(); }
 
-auto operator<<(nlohmann::json & json, const Init & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Init & datum) -> rapidjson::Value &
 {
   json["Actions"] << datum.actions;
 

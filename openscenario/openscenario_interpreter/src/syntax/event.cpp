@@ -17,6 +17,8 @@
 #include <openscenario_interpreter/syntax/custom_command_action.hpp>
 #include <openscenario_interpreter/syntax/event.hpp>
 
+#include "openscenario_interpreter/utility/rapidjson.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -67,21 +69,24 @@ auto Event::evaluate() -> Object
   }
 }
 
-auto operator<<(nlohmann::json & json, const Event & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Event & datum) -> rapidjson::Value &
 {
-  json["name"] = datum.name;
+  // json["name"] = datum.name;
+  json.AddMember("name", datum.name, get_json_allocator());
 
-  json["currentState"] = boost::lexical_cast<std::string>(datum.state());
+  json.AddMember(
+    "currentState", boost::lexical_cast<std::string>(datum.state()), get_json_allocator());
 
   json["currentExecutionCount"] = datum.current_execution_count;
   json["maximumExecutionCount"] = datum.maximum_execution_count;
 
-  json["Action"] = nlohmann::json::array();
+  // json["Action"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("Action", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & each : datum.elements) {
-    nlohmann::json action;
+    rapidjson::Value action;
     action << each.as<Action>();
-    json["Action"].push_back(action);
+    json["Action"].PushBack(action, get_json_allocator());
   }
 
   json["StartTrigger"] << datum.start_trigger;

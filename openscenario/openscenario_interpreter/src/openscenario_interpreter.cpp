@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <chrono>
 #define OPENSCENARIO_INTERPRETER_NO_EXTENSION
 
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
+
 #include <algorithm>
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/openscenario_interpreter.hpp>
 #include <openscenario_interpreter/record.hpp>
 #include <openscenario_interpreter/syntax/object_controller.hpp>
@@ -23,6 +26,7 @@
 #include <openscenario_interpreter/syntax/scenario_definition.hpp>
 #include <openscenario_interpreter/syntax/scenario_object.hpp>
 #include <openscenario_interpreter/utility/overload.hpp>
+#include <openscenario_interpreter/utility/rapidjson.hpp>
 #include <status_monitor/status_monitor.hpp>
 
 #define DECLARE_PARAMETER(IDENTIFIER) \
@@ -200,7 +204,8 @@ auto Interpreter::on_activate(const rclcpp_lifecycle::State &) -> Result
       [&]() {
         if (record) {
           record::start(
-            "-a", "-o", boost::filesystem::path(osc_path).replace_extension("").string());
+            "-a", "--storage", "mcap", "-o",
+            boost::filesystem::path(osc_path).replace_extension("").string());
         }
 
         SimulatorCore::activate(
@@ -271,10 +276,19 @@ auto Interpreter::publishCurrentContext() const -> void
 {
   Context context;
   {
-    nlohmann::json json;
+    const auto start = std::chrono::steady_clock::now();
+    rapidjson::Document doc(rapidjson::kObjectType);
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    doc.SetObject() << *script;
+    doc.Accept(writer);
     context.stamp = now();
-    context.data = (json << *script).dump();
+    context.data = buffer.GetString();
     context.time = evaluateSimulationTime();
+    const auto end = std::chrono::steady_clock::now();
+    RCLCPP_INFO(
+      get_logger(), "Publishing context took %ld us",
+      std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
   }
 
   publisher_of_context->publish(context);

@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
+
 #include <openscenario_interpreter/reader/element.hpp>
 #include <openscenario_interpreter/syntax/custom_command_action.hpp>
 #include <openscenario_interpreter/syntax/scenario_definition.hpp>
@@ -41,12 +44,15 @@ auto ScenarioDefinition::evaluate() -> Object
 
 auto operator<<(std::ostream & os, const ScenarioDefinition & datum) -> std::ostream &
 {
-  nlohmann::json json;
-
-  return os << (json << datum).dump(2);
+  rapidjson::Document doc(rapidjson::kObjectType);
+  rapidjson::StringBuffer buffer;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+  doc.SetObject() << datum;
+  doc.Accept(writer);
+  return os << buffer.GetString();
 }
 
-auto operator<<(nlohmann::json & json, const ScenarioDefinition & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const ScenarioDefinition & datum) -> rapidjson::Value &
 {
   json["Storyboard"] << datum.storyboard;
 

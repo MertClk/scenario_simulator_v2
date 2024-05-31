@@ -15,11 +15,10 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__ACT_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__ACT_HPP_
 
-#include <rapidjson/document.h>
-
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/storyboard_element.hpp>
 #include <openscenario_interpreter/syntax/trigger.hpp>
+#include <openscenario_interpreter/utility/rapidjson.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter

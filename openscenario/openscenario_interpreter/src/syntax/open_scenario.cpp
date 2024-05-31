@@ -44,7 +44,7 @@ auto OpenScenario::load(const boost::filesystem::path & filepath) -> const pugi:
   }
 }
 
-auto operator<<(nlohmann::json & json, const OpenScenario & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const OpenScenario & datum) -> rapidjson::Value &
 {
   json["version"] = "1.0";
 

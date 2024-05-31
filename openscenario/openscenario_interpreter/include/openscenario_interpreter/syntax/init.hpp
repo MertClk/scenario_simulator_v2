@@ -15,9 +15,9 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__INIT_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__INIT_HPP_
 
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/init_actions.hpp>
+#include <openscenario_interpreter/utility/rapidjson.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter
@@ -48,7 +48,7 @@ struct Init
   auto startNonInstantaneousActions() -> void;
 };
 
-auto operator<<(nlohmann::json &, const Init &) -> nlohmann::json &;
+auto operator<<(rapidjson::Value &, const Init &) -> rapidjson::Value &;
 }  // namespace syntax
 }  // namespace openscenario_interpreter
 

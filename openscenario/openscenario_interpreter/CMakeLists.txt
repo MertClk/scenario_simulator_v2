@@ -27,6 +27,8 @@ endif()
 
 include_directories(${rapidjson_SOURCE_DIR}/include)
 
+add_compile_definitions(RAPIDJSON_HAS_STDSTRING=1)
+
 # ------------------------------------------------------------------------------
 # libopenscenario_interpreter
 # ------------------------------------------------------------------------------
@@ -44,7 +46,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/record.cpp
   src/scope.cpp)
 
-target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml rapidjson)
+target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml)
 
 # ------------------------------------------------------------------------------
 # openscenario_interpreter_node

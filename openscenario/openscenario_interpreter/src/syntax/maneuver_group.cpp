@@ -17,6 +17,8 @@
 #include <openscenario_interpreter/syntax/custom_command_action.hpp>
 #include <openscenario_interpreter/syntax/maneuver_group.hpp>
 
+#include "openscenario_interpreter/utility/rapidjson.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -59,21 +61,25 @@ auto ManeuverGroup::start() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const ManeuverGroup & maneuver_group) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const ManeuverGroup & maneuver_group) -> rapidjson::Value &
 {
-  json["name"] = maneuver_group.name;
+  // json["name"] = maneuver_group.name;
+  json.AddMember("name", maneuver_group.name, get_json_allocator());
 
-  json["currentState"] = boost::lexical_cast<std::string>(maneuver_group.state());
+  // json["currentState"] = boost::lexical_cast<std::string>(maneuver_group.state());
+  json.AddMember(
+    "currentState", boost::lexical_cast<std::string>(maneuver_group.state()), get_json_allocator());
 
   json["currentExecutionCount"] = maneuver_group.current_execution_count;
   json["maximumExecutionCount"] = maneuver_group.maximum_execution_count;
 
-  json["Maneuver"] = nlohmann::json::array();
+  // json["Maneuver"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("Maneuver", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (auto && maneuver : maneuver_group.elements) {
-    nlohmann::json json_maneuver;
+    rapidjson::Value json_maneuver;
     json_maneuver << maneuver.as<Maneuver>();
-    json["Maneuver"].push_back(json_maneuver);
+    json["Maneuver"].PushBack(json_maneuver, get_json_allocator());
   }
 
   return json;

@@ -58,14 +58,16 @@ auto Action::stop() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Action & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Action & datum) -> rapidjson::Value &
 {
-  json["name"] = datum.name;
+  json.AddMember("name", datum.name, get_json_allocator());
 
-  json["currentState"] = boost::lexical_cast<std::string>(datum.state());
+  json.AddMember(
+    "currentState", boost::lexical_cast<std::string>(datum.state()), get_json_allocator());
 
-  json["type"] =
-    apply<std::string>([](auto && action) { return makeTypename(action.type()); }, datum);
+  json.AddMember(
+    "type", apply<std::string>([](auto && action) { return makeTypename(action.type()); }, datum),
+    get_json_allocator());
 
   return json;
 }

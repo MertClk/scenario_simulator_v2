@@ -85,16 +85,19 @@ auto Private::startNonInstantaneousActions() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Private & datum) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Private & datum) -> rapidjson::Value &
 {
-  json["entityRef"] = datum.entity_ref;
+  // json["entityRef"] = datum.entity_ref;
+  json.AddMember("entityRef", datum.entity_ref, get_json_allocator());
 
-  json["PrivateAction"] = nlohmann::json::array();
+  // json["PrivateAction"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("PrivateAction", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & private_action : datum.private_actions) {
-    nlohmann::json action;
-    action["type"] = makeTypename(private_action.type());
-    json["PrivateAction"].push_back(action);
+    rapidjson::Value action;
+    // action["type"] = makeTypename(private_action.type());
+    action.AddMember("type", makeTypename(private_action.type()), get_json_allocator());
+    json["PrivateAction"].PushBack(action, get_json_allocator());
   }
 
   return json;

@@ -19,6 +19,8 @@
 #include <openscenario_interpreter/syntax/story.hpp>
 #include <openscenario_interpreter/syntax/string.hpp>
 
+#include "openscenario_interpreter/utility/rapidjson.hpp"
+
 namespace openscenario_interpreter
 {
 inline namespace syntax
@@ -49,18 +51,21 @@ auto Story::run() -> void
   }
 }
 
-auto operator<<(nlohmann::json & json, const Story & story) -> nlohmann::json &
+auto operator<<(rapidjson::Value & json, const Story & story) -> rapidjson::Value &
 {
-  json["name"] = story.name;
+  // json["name"] = story.name;
+  json.AddMember("name", story.name, get_json_allocator());
 
-  json["currentState"] = boost::lexical_cast<std::string>(story.state());
+  json.AddMember(
+    "currentState", boost::lexical_cast<std::string>(story.state()), get_json_allocator());
 
-  json["Act"] = nlohmann::json::array();
+  // json["Act"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("Act", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (auto && act : story.elements) {
-    nlohmann::json json_act;
+    rapidjson::Value json_act;
     json_act << act.as<Act>();
-    json["Act"].push_back(json_act);
+    json["Act"].PushBack(json_act, get_json_allocator());
   }
 
   return json;

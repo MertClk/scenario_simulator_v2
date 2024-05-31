@@ -15,9 +15,9 @@
 #ifndef OPENSCENARIO_INTERPRETER__SYNTAX__CONDITION_GROUP_HPP_
 #define OPENSCENARIO_INTERPRETER__SYNTAX__CONDITION_GROUP_HPP_
 
-#include <nlohmann/json.hpp>
 #include <openscenario_interpreter/scope.hpp>
 #include <openscenario_interpreter/syntax/condition.hpp>
+#include <openscenario_interpreter/utility/rapidjson.hpp>
 #include <pugixml.hpp>
 
 namespace openscenario_interpreter
@@ -49,7 +49,7 @@ struct ConditionGroup : public std::list<Condition>
   auto evaluate() -> Object;
 };
 
-auto operator<<(nlohmann::json &, const ConditionGroup &) -> nlohmann::json &;
+auto operator<<(rapidjson::Value &, const ConditionGroup &) -> rapidjson::Value &;
 
 template <typename T>
 using isConditionGroup = typename std::is_same<typename std::decay<T>::type, ConditionGroup>;
