@@ -44,6 +44,7 @@ auto Init::startNonInstantaneousActions() -> void { actions.startNonInstantaneou
 
 auto operator<<(rapidjson::Value & json, const Init & datum) -> rapidjson::Value &
 {
+  json.AddMember("Actions", rapidjson::Value(rapidjson::kObjectType), get_json_allocator());
   json["Actions"] << datum.actions;
 
   return json;

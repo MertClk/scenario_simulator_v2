@@ -48,21 +48,20 @@ auto Act::run() -> void
 
 auto operator<<(rapidjson::Value & json, const Act & datum) -> rapidjson::Value &
 {
-  // json["name"] = datum.name;
-  json.AddMember("name", datum.name, get_json_allocator());
+  json.AddMember("name", rapidjson::StringRef(datum.name), get_json_allocator());
 
-  // json["currentState"] = boost::lexical_cast<std::string>(datum.state());
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(datum.state()), get_json_allocator());
 
-  json["ManeuverGroup"] = rapidjson::Value(rapidjson::kArrayType);
-  // json.AddMember("ManeuverGroup", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
+  rapidjson::Value maneuverGroup(rapidjson::kArrayType);
 
   for (auto && maneuver_group : datum.elements) {
     rapidjson::Value act;
-    act << maneuver_group.as<ManeuverGroup>();
-    json["ManeuverGroup"].PushBack(act, get_json_allocator());
+    act.SetObject() << maneuver_group.as<ManeuverGroup>();
+    maneuverGroup.PushBack(act, get_json_allocator());
   }
+
+  json.AddMember("ManeuverGroup", maneuverGroup, get_json_allocator());
 
   return json;
 }

@@ -43,13 +43,14 @@ auto operator<<(rapidjson::Value & json, const ConditionGroup & datum) -> rapidj
     "currentValue", boost::lexical_cast<std::string>(Boolean(datum.current_value)),
     get_json_allocator());
 
-  json["Condition"] = rapidjson::Value(rapidjson::kArrayType);
-
+  rapidjson::Value conditions(rapidjson::kArrayType);
   for (const auto & each : datum) {
     rapidjson::Value condition;
-    condition << each;
-    json["Condition"].PushBack(condition, get_json_allocator());
+    condition.SetObject() << each;
+    conditions.PushBack(condition, get_json_allocator());
   }
+
+  json.AddMember("Conditions", conditions, get_json_allocator());
 
   return json;
 }

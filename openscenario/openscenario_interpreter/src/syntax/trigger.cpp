@@ -71,11 +71,11 @@ auto operator<<(rapidjson::Value & json, const Trigger & datum) -> rapidjson::Va
     "currentValue", boost::lexical_cast<std::string>(Boolean(datum.current_value)),
     get_json_allocator());
 
-  json["ConditionGroup"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("ConditionGroup", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & each : datum) {
     rapidjson::Value condition_group;
-    condition_group << each;
+    condition_group.SetObject() << each;
     json["ConditionGroup"].PushBack(condition_group, get_json_allocator());
   }
 

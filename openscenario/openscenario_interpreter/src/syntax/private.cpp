@@ -87,16 +87,16 @@ auto Private::startNonInstantaneousActions() -> void
 
 auto operator<<(rapidjson::Value & json, const Private & datum) -> rapidjson::Value &
 {
-  // json["entityRef"] = datum.entity_ref;
+  // json.AddMember("entityRef", datum.entity_ref, get_json_allocator());
   json.AddMember("entityRef", datum.entity_ref, get_json_allocator());
 
-  // json["PrivateAction"] = rapidjson::Value(rapidjson::kArrayType);
+  // json.AddMember("PrivateAction", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
   json.AddMember("PrivateAction", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & private_action : datum.private_actions) {
     rapidjson::Value action;
     // action["type"] = makeTypename(private_action.type());
-    action.AddMember("type", makeTypename(private_action.type()), get_json_allocator());
+    action.SetObject().AddMember("type", makeTypename(private_action.type()), get_json_allocator());
     json["PrivateAction"].PushBack(action, get_json_allocator());
   }
 

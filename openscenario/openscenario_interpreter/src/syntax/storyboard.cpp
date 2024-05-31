@@ -65,16 +65,17 @@ auto operator<<(rapidjson::Value & json, const Storyboard & datum) -> rapidjson:
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(datum.state()), get_json_allocator());
 
+  json.AddMember("Init", rapidjson::Value(rapidjson::kObjectType), get_json_allocator());
   json["Init"] << datum.init;
 
-  json["Story"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("Story", rapidjson::Value().SetArray(), get_json_allocator());
 
   for (const auto & story : datum.elements) {
-    rapidjson::Value each;
+    rapidjson::Value each(rapidjson::kObjectType);
     if (story.is<InitActions>()) {
       continue;
     }
-    each << story.as<Story>();
+    each.SetObject() << story.as<Story>();
     json["Story"].PushBack(each, get_json_allocator());
   }
 

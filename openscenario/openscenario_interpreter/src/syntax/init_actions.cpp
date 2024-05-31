@@ -158,29 +158,32 @@ auto InitActions::runNonInstantaneousActions() -> void
 
 auto operator<<(rapidjson::Value & json, const InitActions & init_actions) -> rapidjson::Value &
 {
-  json["GlobalAction"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember(
+    "GlobalAction", rapidjson::Value(rapidjson::kArrayType).SetArray(), get_json_allocator());
 
   for (const auto & init_action : init_actions.global_actions) {
     rapidjson::Value action;
-    action.AddMember(
+    action.SetObject().AddMember(
       "type", makeTypename(init_action.as<GlobalAction>().type()), get_json_allocator());
     json["GlobalAction"].PushBack(action, get_json_allocator());
   }
 
-  json["UserDefinedAction"] = rapidjson::Value(rapidjson::kArrayType);
+  rapidjson::Value userDefinedAction(rapidjson::kArrayType);
 
   for (const auto & init_action : init_actions.user_defined_actions) {
     rapidjson::Value action;
-    action.AddMember(
+    action.SetObject().AddMember(
       "type", makeTypename(init_action.as<UserDefinedAction>().type()), get_json_allocator());
-    json["UserDefinedAction"].PushBack(action, get_json_allocator());
+    userDefinedAction.PushBack(action, get_json_allocator());
   }
 
-  json["Private"] = rapidjson::Value(rapidjson::kArrayType);
+  json.AddMember("UserDefinedAction", userDefinedAction, get_json_allocator());
+
+  json.AddMember("Private", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & init_action : init_actions.privates) {
     rapidjson::Value action;
-    action << init_action.as<Private>();
+    action.SetObject() << init_action.as<Private>();
     json["Private"].PushBack(action, get_json_allocator());
   }
 

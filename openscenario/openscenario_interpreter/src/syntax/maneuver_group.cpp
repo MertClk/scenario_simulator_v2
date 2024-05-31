@@ -63,22 +63,24 @@ auto ManeuverGroup::start() -> void
 
 auto operator<<(rapidjson::Value & json, const ManeuverGroup & maneuver_group) -> rapidjson::Value &
 {
-  // json["name"] = maneuver_group.name;
+  // json.AddMember("name", maneuver_group.name, get_json_allocator());
   json.AddMember("name", maneuver_group.name, get_json_allocator());
 
-  // json["currentState"] = boost::lexical_cast<std::string>(maneuver_group.state());
+  // json.AddMember("currentState", boost::lexical_cast<std::string>(maneuver_group.state()), get_json_allocator());
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(maneuver_group.state()), get_json_allocator());
 
-  json["currentExecutionCount"] = maneuver_group.current_execution_count;
-  json["maximumExecutionCount"] = maneuver_group.maximum_execution_count;
+  json.AddMember(
+    "currentExecutionCount", maneuver_group.current_execution_count, get_json_allocator());
+  json.AddMember(
+    "maximumExecutionCount", maneuver_group.maximum_execution_count, get_json_allocator());
 
-  // json["Maneuver"] = rapidjson::Value(rapidjson::kArrayType);
+  // json.AddMember("Maneuver", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
   json.AddMember("Maneuver", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (auto && maneuver : maneuver_group.elements) {
     rapidjson::Value json_maneuver;
-    json_maneuver << maneuver.as<Maneuver>();
+    json_maneuver.SetObject() << maneuver.as<Maneuver>();
     json["Maneuver"].PushBack(json_maneuver, get_json_allocator());
   }
 

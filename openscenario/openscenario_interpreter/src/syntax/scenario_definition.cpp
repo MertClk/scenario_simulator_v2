@@ -54,6 +54,7 @@ auto operator<<(std::ostream & os, const ScenarioDefinition & datum) -> std::ost
 
 auto operator<<(rapidjson::Value & json, const ScenarioDefinition & datum) -> rapidjson::Value &
 {
+  json.AddMember("Storyboard", rapidjson::Value(rapidjson::kObjectType), get_json_allocator());
   json["Storyboard"] << datum.storyboard;
 
   return json;

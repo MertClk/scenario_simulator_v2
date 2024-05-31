@@ -48,17 +48,27 @@ auto operator<<(rapidjson::Value & json, const OpenScenario & datum) -> rapidjso
 {
   json.AddMember("version", "1.0", get_json_allocator());
 
-  json["frame"] = datum.frame;
+  json.AddMember("frame", datum.frame, get_json_allocator());
 
-  // clang-format off
-  json["CurrentStates"]["completeState"]   = openscenario_interpreter::complete_state  .use_count() - 1;
-  json["CurrentStates"]["runningState"]    = openscenario_interpreter::running_state   .use_count() - 1;
-  json["CurrentStates"]["standbyState"]    = openscenario_interpreter::standby_state   .use_count() - 1;
-  json["CurrentStates"]["startTransition"] = openscenario_interpreter::start_transition.use_count() - 1;
-  json["CurrentStates"]["stopTransition"]  = openscenario_interpreter::stop_transition .use_count() - 1;
-  // clang-format on
+  auto states = rapidjson::Value(rapidjson::kObjectType);
+  states.AddMember(
+    "completeState", openscenario_interpreter::complete_state.use_count() - 1,
+    get_json_allocator());
+  states.AddMember(
+    "runningState", openscenario_interpreter::running_state.use_count() - 1, get_json_allocator());
+  states.AddMember(
+    "standbyState", openscenario_interpreter::standby_state.use_count() - 1, get_json_allocator());
+  states.AddMember(
+    "startTransition", openscenario_interpreter::start_transition.use_count() - 1,
+    get_json_allocator());
+  states.AddMember(
+    "stopTransition", openscenario_interpreter::stop_transition.use_count() - 1,
+    get_json_allocator());
+
+  json.AddMember("currentStates", states, get_json_allocator());
 
   if (datum.category.is<ScenarioDefinition>()) {
+    json.AddMember("OpenSCENARIO", rapidjson::Value(rapidjson::kObjectType), get_json_allocator());
     json["OpenSCENARIO"] << datum.category.as<ScenarioDefinition>();
   }
 

@@ -66,18 +66,18 @@ auto Maneuver::running_events_count() const -> std::size_t
 
 auto operator<<(rapidjson::Value & json, const Maneuver & maneuver) -> rapidjson::Value &
 {
-  // json["name"] = maneuver.name;
+  // json.AddMember("name", maneuver.name, get_json_allocator());
   json.AddMember("name", maneuver.name, get_json_allocator());
 
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(maneuver.state()), get_json_allocator());
 
-  // json["Event"] = rapidjson::Value(rapidjson::kArrayType);
+  // json.AddMember("Event", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
   json.AddMember("Event", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (const auto & event : maneuver.elements) {
     rapidjson::Value json_event;
-    json_event << event.as<Event>();
+    json_event.SetObject() << event.as<Event>();
     json["Event"].PushBack(json_event, get_json_allocator());
   }
 

@@ -70,16 +70,13 @@ auto Condition::evaluate() -> Object
 
 auto operator<<(rapidjson::Value & json, const Condition & datum) -> rapidjson::Value &
 {
-  // json["currentEvaluation"] = datum.description();
   json.AddMember("currentEvaluation", datum.description(), get_json_allocator());
 
-  // json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
   json.AddMember(
     "currentValue", boost::lexical_cast<std::string>(Boolean(datum.current_value)),
     get_json_allocator());
 
-  // json["name"] = datum.name;
-  json.AddMember("name", datum.name, get_json_allocator());
+  json.AddMember("name", rapidjson::StringRef(datum.name), get_json_allocator());
 
   // clang-format off
   static const std::unordered_map<
@@ -91,7 +88,7 @@ auto operator<<(rapidjson::Value & json, const Condition & datum) -> rapidjson::
   };
   // clang-format on
 
-  // json["type"] = table.at(datum.type())(datum);
+  // json.AddMember("type", table.at(datum.type())(datum), get_json_allocator());
   json.AddMember("type", table.at(datum.type())(datum), get_json_allocator());
 
   return json;

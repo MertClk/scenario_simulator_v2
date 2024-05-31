@@ -53,18 +53,16 @@ auto Story::run() -> void
 
 auto operator<<(rapidjson::Value & json, const Story & story) -> rapidjson::Value &
 {
-  // json["name"] = story.name;
   json.AddMember("name", story.name, get_json_allocator());
 
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(story.state()), get_json_allocator());
 
-  // json["Act"] = rapidjson::Value(rapidjson::kArrayType);
   json.AddMember("Act", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
 
   for (auto && act : story.elements) {
     rapidjson::Value json_act;
-    json_act << act.as<Act>();
+    json_act.SetObject() << act.as<Act>();
     json["Act"].PushBack(json_act, get_json_allocator());
   }
 

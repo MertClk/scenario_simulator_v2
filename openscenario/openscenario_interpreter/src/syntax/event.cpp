@@ -71,25 +71,25 @@ auto Event::evaluate() -> Object
 
 auto operator<<(rapidjson::Value & json, const Event & datum) -> rapidjson::Value &
 {
-  // json["name"] = datum.name;
-  json.AddMember("name", datum.name, get_json_allocator());
+  // json.AddMember("name", datum.name, get_json_allocator());
+  json.AddMember("name", rapidjson::StringRef(datum.name), get_json_allocator());
 
   json.AddMember(
     "currentState", boost::lexical_cast<std::string>(datum.state()), get_json_allocator());
 
-  json["currentExecutionCount"] = datum.current_execution_count;
-  json["maximumExecutionCount"] = datum.maximum_execution_count;
+  json.AddMember("currentExecutionCount", datum.current_execution_count, get_json_allocator());
+  json.AddMember("maximumExecutionCount", datum.maximum_execution_count, get_json_allocator());
 
-  // json["Action"] = rapidjson::Value(rapidjson::kArrayType);
-  json.AddMember("Action", rapidjson::Value(rapidjson::kArrayType), get_json_allocator());
-
+  rapidjson::Value actions(rapidjson::kArrayType);
   for (const auto & each : datum.elements) {
     rapidjson::Value action;
-    action << each.as<Action>();
-    json["Action"].PushBack(action, get_json_allocator());
+    action.SetObject() << each.as<Action>();
+    actions.PushBack(action, get_json_allocator());
   }
+  json.AddMember("Action", actions, get_json_allocator());
 
-  json["StartTrigger"] << datum.start_trigger;
+  json.AddMember("StartTrigger", rapidjson::Value(rapidjson::kObjectType), get_json_allocator());
+  json["StartTrigger"].SetObject() << datum.start_trigger;
 
   return json;
 }
