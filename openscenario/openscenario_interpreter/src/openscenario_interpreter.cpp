@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <ArduinoJson/Object/JsonObject.hpp>
 #include <chrono>
 #define OPENSCENARIO_INTERPRETER_NO_EXTENSION
 
@@ -275,7 +276,7 @@ auto Interpreter::publishCurrentContext() const -> void
     const auto begin = std::chrono::steady_clock::now();
     ArduinoJson::JsonDocument json;
     context.stamp = now();
-    json.to<openscenario_interpreter::utility::Json>() << *script;
+    json.to<ArduinoJson::JsonObject>() << *script;
     ArduinoJson::serializeJson(json, context.data);
     context.time = evaluateSimulationTime();
     const auto end = std::chrono::steady_clock::now();
