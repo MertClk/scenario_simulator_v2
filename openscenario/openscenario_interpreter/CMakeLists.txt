@@ -14,10 +14,22 @@ find_package(ament_cmake_auto REQUIRED)
 
 ament_auto_find_build_dependencies()
 
-# ------------------------------------------------------------------------------
-#  libopenscenario_interpreter
-# ------------------------------------------------------------------------------
+include(FetchContent)
+FetchContent_Declare(rapidjson
+  GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+  GIT_TAG v1.1.0
+)
+FetchContent_GetProperties(rapidjson)
 
+if(NOT rapidjson_POPULATED)
+  FetchContent_Populate(rapidjson)
+endif()
+
+include_directories(${rapidjson_SOURCE_DIR}/include)
+
+# ------------------------------------------------------------------------------
+# libopenscenario_interpreter
+# ------------------------------------------------------------------------------
 file(GLOB ${PROJECT_NAME}_POSIX_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/posix/*.cpp)
 file(GLOB ${PROJECT_NAME}_SYNTAX_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/syntax/*.cpp)
 file(GLOB ${PROJECT_NAME}_UTILITY_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/utility/*.cpp)
@@ -32,12 +44,11 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/record.cpp
   src/scope.cpp)
 
-target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml)
+target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml rapidjson)
 
 # ------------------------------------------------------------------------------
-#  openscenario_interpreter_node
+# openscenario_interpreter_node
 # ------------------------------------------------------------------------------
-
 ament_auto_add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
 
 target_link_libraries(${PROJECT_NAME}_node ${PROJECT_NAME})
@@ -47,9 +58,8 @@ install(
   DESTINATION lib/${PROJECT_NAME})
 
 # ------------------------------------------------------------------------------
-#  test
+# test
 # ------------------------------------------------------------------------------
-
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
