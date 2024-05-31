@@ -280,7 +280,7 @@ auto Interpreter::publishCurrentContext() const -> void
     rapidjson::Document doc(rapidjson::kObjectType);
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    doc.SetObject() << *script;
+    doc << *script;
     doc.Accept(writer);
     context.stamp = now();
     context.data = buffer.GetString();

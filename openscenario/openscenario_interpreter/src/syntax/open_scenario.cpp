@@ -46,7 +46,7 @@ auto OpenScenario::load(const boost::filesystem::path & filepath) -> const pugi:
 
 auto operator<<(rapidjson::Value & json, const OpenScenario & datum) -> rapidjson::Value &
 {
-  json["version"] = "1.0";
+  json.AddMember("version", "1.0", get_json_allocator());
 
   json["frame"] = datum.frame;
 
