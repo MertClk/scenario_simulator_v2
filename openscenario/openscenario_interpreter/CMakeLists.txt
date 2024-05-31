@@ -46,7 +46,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
   src/record.cpp
   src/scope.cpp)
 
-target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml)
+target_link_libraries(${PROJECT_NAME} Boost::filesystem glog pugixml fmt::fmt)
 
 # ------------------------------------------------------------------------------
 # openscenario_interpreter_node

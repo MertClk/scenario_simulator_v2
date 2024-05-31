@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <fmt/format.h>
+
 #include <iomanip>
 #include <openscenario_interpreter/reader/attribute.hpp>
 #include <openscenario_interpreter/syntax/simulation_time_condition.hpp>
@@ -30,8 +32,8 @@ auto SimulationTimeCondition::description() const -> String
 {
   std::stringstream description;
 
-  description << "Is the simulation time (= " << std::fixed << std::setprecision(6) << result
-              << ") is " << compare << " " << value << "?";
+  description << "Is the simulation time (= " << fmt::format("{:.6f}", result) << ") is " << compare
+              << " " << value << "?";
 
   return description.str();
 }
