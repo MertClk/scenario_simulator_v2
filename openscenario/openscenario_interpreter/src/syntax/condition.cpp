@@ -70,7 +70,7 @@ auto Condition::evaluate() -> Object
 
 auto operator<<(JsonObject json, const Condition & datum) -> JsonObject
 {
-  json["currentEvaluation"] = (new std::string(datum.description()))->c_str();
+  json["currentEvaluation"] = datum.description();
 
   json["currentValue"] = boost::lexical_cast<std::string>(Boolean(datum.current_value));
 
